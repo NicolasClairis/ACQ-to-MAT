@@ -23,7 +23,8 @@ acq_folder = {pwd};
 %acq_folder = [acq_folder {'C:\GSR\1001'}];	% uncomment it if necessary
 %acq_folder = [acq_folder {'C:\GSR\1002'}];	% uncomment it if necessary
 
-chindices = [1 2];  %SPECIFY CHANNEL(S) TO SAVE
+chindices = [5 6];  % SPECIFY CHANNEL(S) TO SAVE
+                    % [1 2] for BM40, [5 6] for BM51, BM54
 
 
 %%%%%%%  Please specify all ACQ folders above   %%%%%%%
