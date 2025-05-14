@@ -69,25 +69,24 @@ function acq = load_acq_chan(filename, chindices, chan_by_chan)
 
    fid = fopen(filename,'r', 'l');
 
-   if fid < 0,
-      msg = sprintf('Cannot open file %s.',filename);
-      error(msg);
+   if fid < 0
+      error(['Cannot open file %s.',filename]);
    end
 
-   fread(fid, 1, 'int16')';
+   fread(fid, 1, 'int16');
    file_version = fread(fid, 1, 'int32')';
 
    %  try different endian
    %
-   if file_version < 0 | file_version > 200
+   if file_version < 0 || file_version > 200
       fclose(fid);
       fid = fopen(filename,'r', 'b');
 
-      fread(fid, 1, 'int16')';
+      fread(fid, 1, 'int16');
       file_version = fread(fid, 1, 'int32')';
       fseek(fid, 0, 'bof');
 
-      if file_version < 0 | file_version > 200
+      if file_version < 0 || file_version > 200
          error('This ACQ file is not supported');
       end
    end
@@ -133,25 +132,24 @@ function acq = load_acq(filename, chan_by_chan)
 
    fid = fopen(filename,'r', 'l');
 
-   if fid < 0,
-      msg = sprintf('Cannot open file %s.',filename);
-      error(msg);
+   if fid < 0
+      error(['Cannot open file %s.',filename]);
    end
 
-   fread(fid, 1, 'int16')';
+   fread(fid, 1, 'int16');
    file_version = fread(fid, 1, 'int32')';
 
    %  try different endian
    %
-   if file_version < 0 | file_version > 200
+   if file_version < 0 || file_version > 200
       fclose(fid);
       fid = fopen(filename,'r', 'b');
 
-      fread(fid, 1, 'int16')';
+      fread(fid, 1, 'int16');
       file_version = fread(fid, 1, 'int32')';
       fseek(fid, 0, 'bof');
 
-      if file_version < 0 | file_version > 200
+      if file_version < 0 || file_version > 200
          error('This ACQ file is not supported');
       end
    end
@@ -200,10 +198,6 @@ function hdr = read_acq_hdr(fid)
       
    hdr.foreign = foreign(fid, hdr.graph.file_version);
 
-   if hdr.graph.file_version >= 68 & hdr.graph.file_version < 80
-      unused = fread(fid, hdr.foreign.length2-12, 'uint8')';
-   end
-
    for i = 1:hdr.graph.num_channels
       hdr.per_chan_type(i) = per_chan_type(fid);
    end
@@ -240,7 +234,7 @@ function hdr = graph(fid, file_version)
    hdr.display_mode = fread(fid, 1, 'int16');		% 146 + 2
    hdr.reserved = fread(fid, 1, 'int16');		% 148 + 2
 
-   if hdr.file_version > 33 & hdr.file_version < 68
+   if hdr.file_version > 33 && hdr.file_version < 68
       hdr.show_toolbar = fread(fid, 1, 'int16');	% 150 + 2
       hdr.show_chan_butt = fread(fid, 1, 'int16');	% 152 + 2
       hdr.show_measurement = fread(fid, 1, 'int16');	% 154 + 2
@@ -250,20 +244,20 @@ function hdr = graph(fid, file_version)
       hdr.mmt_precision = fread(fid, 1, 'int16');	% 162 + 2
    end
 
-   if hdr.file_version > 34 & hdr.file_version < 68
+   if hdr.file_version > 34 && hdr.file_version < 68
       hdr.measurement_row = fread(fid, 1, 'int16');	% 164 + 2
       hdr.mmt = fread(fid, 40, 'int16');		% 166 + 80
       hdr.mmt_chan = fread(fid, 40, 'int16');		% 246 + 80
    end
 
-   if hdr.file_version > 35 & hdr.file_version < 68
+   if hdr.file_version > 35 && hdr.file_version < 68
       hdr.mmt_calc_opnd1 = fread(fid, 40, 'int16');	% 326 + 80
       hdr.mmt_calc_opnd2 = fread(fid, 40, 'int16');	% 406 + 80
       hdr.mmt_calc_op = fread(fid, 40, 'int16');	% 486 + 80
       hdr.mmt_calc_constant = fread(fid, 40, 'double');	% 566 + 320
    end
 
-   if hdr.file_version > 37 & hdr.file_version < 68
+   if hdr.file_version > 37 && hdr.file_version < 68
       hdr.new_grid_minor = fread(fid, 1, 'int32');	% 886 + 4
       hdr.color_major_grid = fread(fid, 1, 'int32');	% 890 + 4
       hdr.color_minor_grid = fread(fid, 1, 'int32');	% 894 + 4
@@ -293,11 +287,11 @@ function hdr = graph(fid, file_version)
 
    end
 
-   if hdr.file_version > 38 & hdr.file_version < 68
+   if hdr.file_version > 38 && hdr.file_version < 68
       hdr.horiz_precision = fread(fid, 1, 'int16');	% 1894 + 2
    end
 
-   if hdr.file_version > 40 & hdr.file_version < 68
+   if hdr.file_version > 40 && hdr.file_version < 68
       hdr.reserved2 = fread(fid, 20, 'int8');		% 1896 + 20
       hdr.overlap_mode = fread(fid, 1, 'int32');	% 1916 + 4
       hdr.show_hardware = fread(fid, 1, 'int32');	% 1920 + 4
@@ -308,14 +302,14 @@ function hdr = graph(fid, file_version)
       hdr.always_start_butt_visible = fread(fid, 1, 'int32');	% 1940 + 4
    end
 
-   if hdr.file_version > 42 & hdr.file_version < 68
+   if hdr.file_version > 42 && hdr.file_version < 68
       hdr.path_video = deblank(fread(fid, 260, '*char')'); % 1944 + 260
       hdr.opt_sync_delay = fread(fid, 1, 'int32');	% 2204 + 4
       hdr.sync_delay = fread(fid, 1, 'double');		% 2208 + 8
       hdr.hrp_paste_measurement = fread(fid, 1, 'int32'); % 2216 + 4
    end
 
-   if hdr.file_version > 44 & hdr.file_version < 68
+   if hdr.file_version > 44 && hdr.file_version < 68
       hdr.graph_type = fread(fid, 1, 'int32');		% 2220 + 4
       hdr.mmt_calc_expr = fread(fid, [40 256], '*char'); % 2224 + 10240
       hdr.mmt_moment_order = fread(fid, 40, 'int32');	% 12464 + 160
@@ -325,7 +319,6 @@ function hdr = graph(fid, file_version)
    end
 
    if hdr.file_version >= 68
-      unused = fread(fid, 411, 'int16')';		% 150 + 822
       hdr.compressed = fread(fid, 1, 'int32');		% 972 + 4
    end
 
@@ -351,8 +344,6 @@ function hdr = per_chan_data(fid, file_version)
    hdr.disp_size = fread(fid, 1, 'int16')';		% 110 + 2
 
    if file_version >= 68
-
-      unused = fread(fid, 5, 'double')';		% 112 + 40
       hdr.var_sample_divider = fread(fid, 1, 'int16')'; % 152 + 2
 
    else
@@ -412,10 +403,8 @@ function hdr = foreign(fid, file_version)
       hdr.by_foreign_data = fread(fid, hdr.length-4, 'int8')'; % 4 + x
       hdr.length2 = hdr.length;
    elseif file_version < 80
-      unused = fread(fid, 1, 'int32')';			% 4 + 4
       hdr.length2 = fread(fid, 1, 'int32')' + 8;	% 8 + 4
    else
-      unused = fread(fid, 1, 'int32')';			% 4 + 4
       hdr.length2 = hdr.length + 8;
    end
 
@@ -449,14 +438,14 @@ function data = read_acq(fid, hdr, chan_by_chan)
    
    sample_divider = [hdr.per_chan_data.var_sample_divider];
 
-   if length(unique(sample_divider))==1 & unique(sample_divider)==1
+   if length(unique(sample_divider))==1 && unique(sample_divider)==1
       min_len = min([hdr.per_chan_data.buf_length]);
    else
       min_len = min([hdr.per_chan_data.buf_length].*sample_divider);
    end
 
-   if length(unique([hdr.per_chan_type.type])) & ~chan_by_chan & ...
-	length(unique(sample_divider))==1 & unique(sample_divider)==1
+   if length(unique([hdr.per_chan_type.type])) && ~chan_by_chan && ...
+	length(unique(sample_divider))==1 && unique(sample_divider)==1
 
       half_chan = round(hdr.graph.num_channels/2);
 
@@ -481,7 +470,7 @@ function data = read_acq(fid, hdr, chan_by_chan)
 
    else				% if we have to do it chan_by_chan
 
-      if length(unique(sample_divider))==1 & unique(sample_divider)==1
+      if length(unique(sample_divider))==1 && unique(sample_divider)==1
 
          %  Since data are arranged like: "channel in sample"
          %  { s1 of {ch1 ch2 ...}, s2 of {ch1 ch2 ...} ... }
@@ -550,7 +539,7 @@ function data = read_acq(fid, hdr, chan_by_chan)
             end
 
             for j = 1:hdr.graph.num_channels
-               if mask(i,j) | sample_divider(j)==1
+               if mask(i,j) || sample_divider(j)==1
                   if hdr.per_chan_type(j).type == 1		% double
                      data(i,j) = fread(fid,1,'double');
                   else
@@ -599,14 +588,14 @@ function data = read_acq_chan(fid, hdr, chindices, chan_by_chan)
    
    sample_divider = [hdr.per_chan_data.var_sample_divider];
 
-   if length(unique(sample_divider))==1 & unique(sample_divider)==1
+   if length(unique(sample_divider))==1 && unique(sample_divider)==1
       min_len = min([hdr.per_chan_data.buf_length]);
    else
       min_len = min([hdr.per_chan_data.buf_length].*sample_divider);
    end
 
-   if length(unique([hdr.per_chan_type.type])) & ~chan_by_chan & ...
-	length(unique(sample_divider))==1 & unique(sample_divider)==1
+   if length(unique([hdr.per_chan_type.type])) && ~chan_by_chan && ...
+	length(unique(sample_divider))==1 && unique(sample_divider)==1
 
       half_chan = round(hdr.graph.num_channels/2);
 
@@ -631,7 +620,7 @@ function data = read_acq_chan(fid, hdr, chindices, chan_by_chan)
 
     else				% if we have to do it chan_by_chan
 
-      if length(unique(sample_divider))==1 & unique(sample_divider)==1
+      if length(unique(sample_divider))==1 && unique(sample_divider)==1
 
          %  Since data are arranged like: "channel in sample"
          %  { s1 of {ch1 ch2 ...}, s2 of {ch1 ch2 ...} ... }
@@ -701,7 +690,7 @@ function data = read_acq_chan(fid, hdr, chindices, chan_by_chan)
             end
 
             for j = 1:hdr.graph.num_channels
-               if mask(i,j) | sample_divider(j)==1
+               if mask(i,j) || sample_divider(j)==1
                   if hdr.per_chan_type(j).type == 1		% double
                      data(i,j) = fread(fid,1,'double');
                   else
@@ -757,7 +746,7 @@ function data = read_acq_chan(fid, hdr, chindices, chan_by_chan)
 
      info.lLength = fread(fid,1,'*int32');
      info.lMarkers = fread(fid,1,'*int32');		% Number of markers
-     if (info.lLength > 0) & (info.lMarkers > 0)
+     if (info.lLength > 0) && (info.lMarkers > 0)
          for n = 1:double(info.lMarkers)
              info.lSample(n) = fread(fid,1,'*int32');	% Location of marker
              info.fSelected(n) = fread(fid,1,'*int16');

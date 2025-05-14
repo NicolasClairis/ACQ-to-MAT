@@ -46,7 +46,7 @@ for i=1:length(acq_folder)
           acq = load_acq_chan(acq_fn, chindices);
 
          v7 = version;
-         if str2num(v7(1))<7
+         if str2double(v7(1))<7
             save(mat_fn, 'acq');
          else
             save(mat_fn, '-V6', 'acq');
